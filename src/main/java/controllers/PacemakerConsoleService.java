@@ -29,32 +29,61 @@ public class PacemakerConsoleService
   public void register(@Param(name = "first name") String firstName, @Param(name = "last name") String lastName,
       @Param(name = "email") String email, @Param(name = "password") String password)
   {
+    console.renderUser(paceApi.createUser(firstName, lastName, email, password));
   }
 
   @Command(description = "List Users: List all users emails, first and last names")
   public void listUsers()
   {
+    console.renderUsers(paceApi.getUsers());
   }
 
   @Command(description = "Login: Log in a registered user in to pacemaker")
   public void login(@Param(name = "email") String email, @Param(name = "password") String password)
   {
+    Optional<User> user = Optional.fromNullable(paceApi.getUserByEmail(email));
+    if (user.isPresent())
+    {
+      if (user.get().password.equals(password))
+      {
+        loggedInUser = user.get();
+        console.println("Logged in " + loggedInUser.email);
+        console.println("ok");
+      }
+      else
+      {
+        console.println("Error on login");
+      }
+    }
   }
 
   @Command(description = "Logout: Logout current user")
   public void logout()
   {
+    console.println("Logging out " + loggedInUser.email);
+    console.println("ok");
+    loggedInUser = null;
   }
 
   @Command(description = "Add activity: create and add an activity for the logged in user")
   public void addActivity(@Param(name = "type") String type, @Param(name = "location") String location,
       @Param(name = "distance") double distance)
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
+    {
+      console.renderActivity(paceApi.createActivity(user.get().id, type, location, distance));
+    }
   }
 
   @Command(description = "List Activities: List all activities for logged in user")
   public void listActivities()
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
+    {
+      console.renderActivities(paceApi.getActivities(user.get().id));
+    }
   }
 
   // Baseline Commands
