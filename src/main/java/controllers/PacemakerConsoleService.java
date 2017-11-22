@@ -1,12 +1,13 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import com.google.common.base.Optional;
 
 import asg.cliche.Command;
 import asg.cliche.Param;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import models.Activity;
 import models.User;
 import parsers.AsciiTableParser;
@@ -92,21 +93,58 @@ public class PacemakerConsoleService
   public void addLocation(@Param(name = "activity-id") String id, @Param(name = "longitude") double longitude,
       @Param(name = "latitude") double latitude)
   {
+    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(id));
+    if (activity.isPresent())
+    {
+      paceApi.addLocation(activity.get().id, latitude, longitude);
+      console.println("ok");
+    }
+    else
+    {
+      console.println("not found");
+    }
   }
 
   @Command(description = "ActivityReport: List all activities for logged in user, sorted alphabetically by type")
   public void activityReport()
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
+    {
+      console.renderActivities(paceApi.listActivities(user.get().id, "type"));
+    }
   }
 
   @Command(description = "Activity Report: List all activities for logged in user by type. Sorted longest to shortest distance")
-  public void activityReport(@Param(name = "byType: type") String sortBy)
+  public void activityReport(@Param(name = "byType: type") String type)
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
+    {
+      List<Activity> reportActivities = new ArrayList<>();
+      Collection<Activity> usersActivities = paceApi.getActivities(user.get().id);
+      usersActivities.forEach(a -> {
+        if (a.type.equals(type))
+          reportActivities.add(a);
+      });
+      reportActivities.sort((a1, a2) -> {
+        if (a1.distance >= a2.distance)
+          return -1;
+        else
+          return 1;
+      });
+      console.renderActivities(reportActivities);
+    }
   }
 
   @Command(description = "List all locations for a specific activity")
   public void listActivityLocations(@Param(name = "activity-id") String id)
   {
+    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(id));
+    if (activity.isPresent())
+    {
+      console.renderLocations(activity.get().route);
+    }
   }
 
   @Command(description = "Follow Friend: Follow a specific friend")
