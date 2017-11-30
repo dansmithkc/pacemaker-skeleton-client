@@ -4,6 +4,7 @@ import static models.Fixtures.users;
 
 import io.javalin.Context;
 import models.Activity;
+import models.Location;
 import models.User;
 
 public class PacemakerRestService
@@ -55,6 +56,36 @@ public class PacemakerRestService
     if (user != null)
     {
       ctx.json(user.activities.values());
+    }
+    else
+    {
+      ctx.status(404);
+    }
+  }
+
+  public void getActivityLocations(Context ctx)
+  {
+    String id = ctx.param("activityId");
+    Activity activity = pacemaker.getActivity(id);
+    if (activity != null)
+    {
+      ctx.json(activity.route);
+    }
+    else
+    {
+      ctx.status(404);
+    }
+  }
+
+  public void addLocation(Context ctx)
+  {
+    String id = ctx.param("activityId");
+    Activity activity = pacemaker.getActivity(id);
+    if (activity != null)
+    {
+      Location location = ctx.bodyAsClass(Location.class);
+      activity.route.add(location);
+      ctx.json(location);
     }
     else
     {

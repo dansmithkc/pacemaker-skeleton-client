@@ -35,6 +35,14 @@ public class RestMain
       service.getActivities(ctx);
     });
 
+    app.get("/users/:id/activities/:activityId/locations", ctx -> {
+      service.getActivityLocations(ctx);
+    });
+
+    app.post("/users/:id/activities/:activityId/locations", ctx -> {
+      service.addLocation(ctx);
+    });
+
     app.post("/users/:id/activities", ctx -> {
       service.createActivity(ctx);
     });
