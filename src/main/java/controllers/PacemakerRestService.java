@@ -38,6 +38,7 @@ public class PacemakerRestService
   public void getActivity(Context ctx)
   {
     String id = ctx.param("activityId");
+    // TO DO - throw a 404 if user id is not valid for that activity
     Activity activity = pacemaker.getActivity(id);
     if (activity != null)
     {
@@ -67,6 +68,7 @@ public class PacemakerRestService
   {
     String id = ctx.param("activityId");
     Activity activity = pacemaker.getActivity(id);
+    // TO DO - throw a 404 if user id is not valid for that activity
     if (activity != null)
     {
       ctx.json(activity.route);
@@ -81,6 +83,7 @@ public class PacemakerRestService
   {
     String id = ctx.param("activityId");
     Activity activity = pacemaker.getActivity(id);
+    // TO DO - throw a 404 if user id is not valid for that activity
     if (activity != null)
     {
       Location location = ctx.bodyAsClass(Location.class);

@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>pacemaker</groupId>
-	<artifactId>pacemaker-skeleton</artifactId>
+	<artifactId>pacemaker-skeleton-client</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>pacemaker-skeleton</name>
+	<name>pacemaker-skeleton-client</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
