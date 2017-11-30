@@ -27,6 +27,10 @@ public class RestMain
       service.listUser(ctx);
     });
 
+    app.get("/users/:id/activities/:activityId", ctx -> {
+      service.getActivity(ctx);
+    });
+
     app.get("/users/:id/activities", ctx -> {
       service.getActivities(ctx);
     });

@@ -34,6 +34,20 @@ public class PacemakerRestService
     ctx.json(pacemaker.getUser(id));
   }
 
+  public void getActivity(Context ctx)
+  {
+    String id = ctx.param("activityId");
+    Activity activity = pacemaker.getActivity(id);
+    if (activity != null)
+    {
+      ctx.json(activity);
+    }
+    else
+    {
+      ctx.status(404);
+    }
+  }
+
   public void getActivities(Context ctx)
   {
     String id = ctx.param("id");
