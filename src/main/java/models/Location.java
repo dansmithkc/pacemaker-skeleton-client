@@ -1,10 +1,7 @@
 package models;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
-
 import java.io.Serializable;
-import java.util.UUID;
-
 import com.google.common.base.Objects;
 
 public class Location implements Serializable
@@ -35,7 +32,6 @@ public class Location implements Serializable
 
   public Location(double latitude, double longitude)
   {
-    this.id = UUID.randomUUID().toString();
     this.latitude = latitude;
     this.longitude = longitude;
   }

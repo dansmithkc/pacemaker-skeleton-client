@@ -1,117 +1,153 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.google.common.base.Optional;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import models.Activity;
-import models.Location;
 import models.User;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+
+interface PacemakerInterface
+{
+  @GET("/users")
+  Call<List<User>> getUsers();
+
+  @POST("/users")
+  Call<User> registerUser(@Body User User);
+
+  @GET("/users/{id}/activities")
+  Call<List<Activity>> getActivities(@Path("id") String id);
+
+  @POST("/users/{id}/activities")
+  Call<Activity> addActivity(@Path("id") String id, @Body Activity activity);
+}
 
 public class PacemakerAPI
 {
 
-  private Map<String, User> emailIndex = new HashMap<>();
-  private Map<String, User> userIndex = new HashMap<>();
-  private Map<String, Activity> activitiesIndex = new HashMap<>();
+  PacemakerInterface pacemakerInterface;
 
-  public PacemakerAPI()
+  public PacemakerAPI(String url)
   {
+    Gson gson = new GsonBuilder().create();
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create(gson))
+        .build();
+    pacemakerInterface = retrofit.create(PacemakerInterface.class);
   }
 
   public Collection<User> getUsers()
   {
-    return userIndex.values();
+    Collection<User> users = null;
+    try
+    {
+      Call<List<User>> call = pacemakerInterface.getUsers();
+      Response<List<User>> response = call.execute();
+      users = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return users;
   }
 
   public void deleteUsers()
   {
-    userIndex.clear();
-    emailIndex.clear();
   }
 
   public User createUser(String firstName, String lastName, String email, String password)
   {
-    User user = new User(firstName, lastName, email, password);
-    emailIndex.put(email, user);
-    userIndex.put(user.id, user);
-    return user;
+    User returnedUser = null;
+    try
+    {
+      Call<User> call = pacemakerInterface.registerUser(new User(firstName, lastName, email, password));
+      Response<User> response = call.execute();
+      returnedUser = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return returnedUser;
   }
 
   public Activity createActivity(String id, String type, String location, double distance)
   {
-    Activity activity = null;
-    Optional<User> user = Optional.fromNullable(userIndex.get(id));
-    if (user.isPresent())
+    Activity returnedActivity = null;
+    try
     {
-      activity = new Activity(type, location, distance);
-      user.get().activities.put(activity.id, activity);
-      activitiesIndex.put(activity.id, activity);
+      Call<Activity> call = pacemakerInterface.addActivity(id, new Activity(type, location, distance));
+      Response<Activity> response = call.execute();
+      returnedActivity = response.body();
     }
-    return activity;
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return returnedActivity;
   }
 
   public Activity getActivity(String id)
   {
-    return activitiesIndex.get(id);
+    return null;
   }
 
   public Collection<Activity> getActivities(String id)
   {
     Collection<Activity> activities = null;
-    Optional<User> user = Optional.fromNullable(userIndex.get(id));
-    if (user.isPresent())
+    try
     {
-      activities = user.get().activities.values();
+      Call<List<Activity>> call = pacemakerInterface.getActivities(id);
+      Response<List<Activity>> response = call.execute();
+      activities = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
     }
     return activities;
   }
 
   public List<Activity> listActivities(String userId, String sortBy)
   {
-    List<Activity> activities = new ArrayList<>();
-    activities.addAll(userIndex.get(userId).activities.values());
-    switch (sortBy)
-    {
-    case "type":
-      activities.sort((a1, a2) -> a1.type.compareTo(a2.type));
-      break;
-    case "location":
-      activities.sort((a1, a2) -> a1.location.compareTo(a2.location));
-      break;
-    case "distance":
-      activities.sort((a1, a2) -> Double.compare(a1.distance, a2.distance));
-      break;
-    }
-    return activities;
+    return null;
   }
 
   public void addLocation(String id, double latitude, double longitude)
   {
-    Optional<Activity> activity = Optional.fromNullable(activitiesIndex.get(id));
-    if (activity.isPresent())
-    {
-      activity.get().route.add(new Location(latitude, longitude));
-    }
   }
 
   public User getUserByEmail(String email)
   {
-    return emailIndex.get(email);
+    Collection<User> users = getUsers();
+    User foundUser = null;
+    for (User user : users)
+    {
+      if (user.email.equals(email))
+      {
+        foundUser = user;
+      }
+    }
+    return foundUser;
   }
 
   public User getUser(String id)
   {
-    return userIndex.get(id);
+    return null;
   }
 
   public User deleteUser(String id)
   {
-    User user = userIndex.remove(id);
-    return emailIndex.remove(user.email);
+    return null;
   }
 }

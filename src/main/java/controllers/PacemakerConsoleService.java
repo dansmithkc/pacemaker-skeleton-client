@@ -16,7 +16,7 @@ import parsers.Parser;
 public class PacemakerConsoleService
 {
 
-  private PacemakerAPI paceApi = new PacemakerAPI();;
+  private PacemakerAPI paceApi = new PacemakerAPI("http://localhost:7000");;
   private Parser console = new AsciiTableParser();
   private User loggedInUser = null;
 
@@ -143,7 +143,7 @@ public class PacemakerConsoleService
     Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(id));
     if (activity.isPresent())
     {
-      console.renderLocations(activity.get().route);
+      // console.renderLocations(activity.get().route);
     }
   }
 
