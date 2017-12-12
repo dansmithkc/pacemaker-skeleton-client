@@ -93,10 +93,10 @@ public class PacemakerConsoleService
   public void addLocation(@Param(name = "activity-id") String id, @Param(name = "longitude") double longitude,
       @Param(name = "latitude") double latitude)
   {
-    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(id));
+    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
     if (activity.isPresent())
     {
-      paceApi.addLocation(activity.get().id, latitude, longitude);
+      paceApi.addLocation(loggedInUser.getId(), activity.get().id, latitude, longitude);
       console.println("ok");
     }
     else
@@ -140,7 +140,7 @@ public class PacemakerConsoleService
   @Command(description = "List all locations for a specific activity")
   public void listActivityLocations(@Param(name = "activity-id") String id)
   {
-    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(id));
+    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
     if (activity.isPresent())
     {
       // console.renderLocations(activity.get().route);

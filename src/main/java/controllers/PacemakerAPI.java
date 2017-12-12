@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import models.Activity;
+import models.Location;
 import models.User;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -30,6 +31,12 @@ interface PacemakerInterface
 
   @POST("/users/{id}/activities")
   Call<Activity> addActivity(@Path("id") String id, @Body Activity activity);
+
+  @GET("/users/{id}/activities/{activityId}")
+  Call<Activity> getActivity(@Path("id") String id, @Path("activityId") String activityId);
+
+  @POST("/users/{id}/activities/{activityId}/locations")
+  Call<Location> addLocation(@Path("id") String id, @Path("activityId") String activityId, @Body Location location);
 }
 
 public class PacemakerAPI
@@ -97,9 +104,20 @@ public class PacemakerAPI
     return returnedActivity;
   }
 
-  public Activity getActivity(String id)
+  public Activity getActivity(String userId, String activityId)
   {
-    return null;
+    Activity activity = null;
+    try
+    {
+      Call<Activity> call = pacemakerInterface.getActivity(userId, activityId);
+      Response<Activity> response = call.execute();
+      activity = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return activity;
   }
 
   public Collection<Activity> getActivities(String id)
@@ -123,8 +141,17 @@ public class PacemakerAPI
     return null;
   }
 
-  public void addLocation(String id, double latitude, double longitude)
+  public void addLocation(String id, String activityId, double latitude, double longitude)
   {
+    try
+    {
+      Call<Location> call = pacemakerInterface.addLocation(id, activityId, new Location(latitude, longitude));
+      call.execute();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
   }
 
   public User getUserByEmail(String email)
