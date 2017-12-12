@@ -14,6 +14,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -37,6 +38,15 @@ interface PacemakerInterface
 
   @POST("/users/{id}/activities/{activityId}/locations")
   Call<Location> addLocation(@Path("id") String id, @Path("activityId") String activityId, @Body Location location);
+
+  @DELETE("/users")
+  Call<User> deleteUsers();
+
+  @DELETE("/users/{id}")
+  Call<User> deleteUser(@Path("id") String id);
+
+  @GET("/users/{id}")
+  Call<User> getUser(@Path("id") String id);
 }
 
 public class PacemakerAPI
@@ -66,10 +76,6 @@ public class PacemakerAPI
       System.out.println(e.getMessage());
     }
     return users;
-  }
-
-  public void deleteUsers()
-  {
   }
 
   public User createUser(String firstName, String lastName, String email, String password)
@@ -170,11 +176,46 @@ public class PacemakerAPI
 
   public User getUser(String id)
   {
-    return null;
+    User user = null;
+    try
+    {
+      Call<User> call = pacemakerInterface.getUser(id);
+      Response<User> response = call.execute();
+      user = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return user;
+  }
+
+  public void deleteUsers()
+  {
+    try
+    {
+      Call<User> call = pacemakerInterface.deleteUsers();
+      call.execute();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
   }
 
   public User deleteUser(String id)
   {
-    return null;
+    User user = null;
+    try
+    {
+      Call<User> call = pacemakerInterface.deleteUser(id);
+      Response<User> response = call.execute();
+      user = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return user;
   }
 }
