@@ -5,13 +5,15 @@ import java.util.Collection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import configuration.PacemakerAPIConfiguration;
 import models.User;
 import static models.Fixtures.users;
 
 public class UserTest
 {
 
-  PacemakerAPI pacemaker = new PacemakerAPI("http://localhost:7000");
+  PacemakerAPI pacemaker = new PacemakerAPI(PacemakerAPIConfiguration.PACEMAKER_API_URL);
   User homer = new User("homer", "simpson", "homer@simpson.com", "secret");
 
   @Before

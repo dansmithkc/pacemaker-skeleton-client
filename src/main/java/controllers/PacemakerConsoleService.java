@@ -8,6 +8,7 @@ import com.google.common.base.Optional;
 
 import asg.cliche.Command;
 import asg.cliche.Param;
+import configuration.PacemakerAPIConfiguration;
 import models.Activity;
 import models.User;
 import parsers.AsciiTableParser;
@@ -15,8 +16,7 @@ import parsers.Parser;
 
 public class PacemakerConsoleService
 {
-
-  private PacemakerAPI paceApi = new PacemakerAPI("http://localhost:7000");;
+  private PacemakerAPI paceApi = new PacemakerAPI(PacemakerAPIConfiguration.PACEMAKER_API_URL);
   private Parser console = new AsciiTableParser();
   private User loggedInUser = null;
 
