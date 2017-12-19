@@ -14,6 +14,7 @@ import configuration.PacemakerAPIConfiguration;
 import models.Activity;
 import models.Location;
 import models.User;
+import static models.Fixtures.locations;
 
 public class ActivityTest
 {
@@ -79,5 +80,19 @@ public class ActivityTest
     List<Location> locations = pacemaker.getLocations(homer.id, returnedActivity.id);
     assertEquals(locations.size(), 1);
     assertEquals(locations.get(0), location);
+  }
+
+  @Test
+  public void testCreateActivityWithMultipleLocation()
+  {
+    pacemaker.deleteActivities(homer.id);
+    Activity activity = new Activity("walk", "shop", 2.5);
+    Activity returnedActivity = pacemaker.createActivity(homer.id, activity.type, activity.location, activity.distance);
+
+    locations.forEach(
+        location -> pacemaker.addLocation(homer.id, returnedActivity.id, location.latitude, location.longitude));
+    List<Location> returnedLocations = pacemaker.getLocations(homer.id, returnedActivity.id);
+    assertEquals(locations.size(), returnedLocations.size());
+    assertEquals(locations, returnedLocations);
   }
 }
