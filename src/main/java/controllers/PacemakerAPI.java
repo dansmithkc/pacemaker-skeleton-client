@@ -47,6 +47,12 @@ interface PacemakerInterface
 
   @GET("/users/{id}")
   Call<User> getUser(@Path("id") String id);
+
+  @GET("/users/{id}/activities/{activityId}/locations")
+  Call<List<Location>> getLocations(@Path("id") String id, @Path("activityId") String activityId);
+
+  @DELETE("/users/{id}/activities")
+  Call<String> deleteActivities(@Path("id") String id);
 }
 
 public class PacemakerAPI
@@ -217,5 +223,34 @@ public class PacemakerAPI
       System.out.println(e.getMessage());
     }
     return user;
+  }
+
+  public List<Location> getLocations(String id, String activityId)
+  {
+    List<Location> locations = null;
+    try
+    {
+      Call<List<Location>> call = pacemakerInterface.getLocations(id, activityId);
+      Response<List<Location>> response = call.execute();
+      locations = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return locations;
+  }
+
+  public void deleteActivities(String id)
+  {
+    try
+    {
+      Call<String> call = pacemakerInterface.deleteActivities(id);
+      call.execute();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
   }
 }
