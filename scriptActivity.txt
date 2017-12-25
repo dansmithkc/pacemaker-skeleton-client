@@ -1,4 +1,3 @@
-r Dan Smith dansmithkc@yahoo.com secret
 l dansmithkc@yahoo.com secret
 la
 aa run fast 2
