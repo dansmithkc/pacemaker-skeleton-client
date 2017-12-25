@@ -1,0 +1,13 @@
+lu
+r Dan Smith dansmithkc@yahoo.com secret
+lu
+r Harry Helper helper@gmail.com anothersecret
+lu
+l dansmithkc@yahoo.com secret
+l helper@gmail.com anothersecret
+l
+l helper.gmail.com invalidsecret
+l
+l nobody nothing
+l
+l dansmithkc@yahoo.com secret
