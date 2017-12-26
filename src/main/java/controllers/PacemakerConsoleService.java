@@ -134,7 +134,7 @@ public class PacemakerConsoleService
     Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
     if (activity.isPresent())
     {
-      // console.renderLocations(activity.get().route);
+      console.renderLocations(activity.get().route);
     }
   }
 
