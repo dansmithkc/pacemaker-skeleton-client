@@ -7,6 +7,13 @@ la
 aa run slow 99
 la
 ar
+aa run slow 999
+aa run slow 9
+aa talk slow 99
+aa play slow 999
+aa experiment slow 9
+aa run slow 99
+ar run
 l
 la
 ar

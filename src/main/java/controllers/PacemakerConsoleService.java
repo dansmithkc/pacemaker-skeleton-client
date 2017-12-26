@@ -1,8 +1,8 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Optional;
 
@@ -121,19 +121,10 @@ public class PacemakerConsoleService
     Optional<User> user = Optional.fromNullable(loggedInUser);
     if (user.isPresent())
     {
-      List<Activity> reportActivities = new ArrayList<>();
-      Collection<Activity> usersActivities = paceApi.getActivities(user.get().id, type);
-      usersActivities.forEach(a -> {
-        if (a.type.equals(type))
-          reportActivities.add(a);
-      });
-      reportActivities.sort((a1, a2) -> {
-        if (a1.distance >= a2.distance)
-          return -1;
-        else
-          return 1;
-      });
-      console.renderActivities(reportActivities);
+      Collection<Activity> usersActivities = paceApi.getActivities(user.get().id, "distance");
+      List<Activity> returnedActivities = usersActivities.stream().filter(a -> a.type.equals(type))
+          .collect(Collectors.toList());
+      console.renderActivities(returnedActivities);
     }
   }
 
