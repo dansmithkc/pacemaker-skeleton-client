@@ -1,0 +1,26 @@
+abbrev	name	params
+* r	register	(first name, last name, email, password)
+dlbbt	distance-leader-board-by-type	(byType: type)
+dlb	distance-leader-board	()
+maf	message-all-friends	(message)
+llb	location-leader-board	(location)
+far	friend-activity-report	(email)
+lal	list-activity-locations	(activity-id)
+* l	login	(email, password)
+* aa	add-activity	(type, location, distance)
+* la	list-activities	()
+* lu	list-users	()
+f	follow	(email)
+uf	unfollow-friend	()
+lm	list-messages	()
+lf	list-friends	()
+mf	message-friend	(email, message)
+* l	logout	()
+* al	add-location	(activity-id, longitude, latitude)
+ar	activity-report	()
+ar	activity-report	(byType: type)
+
+scripts
+!rs scriptUser.txt
+!rs scriptActivity.txt
+!rs scriptLocation.txt

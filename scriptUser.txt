@@ -6,7 +6,7 @@ lu
 l dansmithkc@yahoo.com secret
 l helper@gmail.com anothersecret
 l
-l helper.gmail.com invalidsecret
+l helper@gmail.com invalidsecret
 l
 l nobody nothing
 l
