@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -54,6 +55,12 @@ interface PacemakerInterface
 
   @DELETE("/users/{id}/activities")
   Call<String> deleteActivities(@Path("id") String id);
+
+  @GET("/users/{id}/friends")
+  Call<List<User>> listFriends(@Path("id") String id);
+
+  @POST("/users/{id}/friends/{friendId}")
+  Call<User> followFriend(@Path("id") String id, @Path("friendId") String friendId);
 }
 
 public class PacemakerAPI
@@ -69,9 +76,9 @@ public class PacemakerAPI
     pacemakerInterface = retrofit.create(PacemakerInterface.class);
   }
 
-  public Collection<User> getUsers()
+  public List<User> getUsers()
   {
-    Collection<User> users = null;
+    List<User> users = null;
     try
     {
       Call<List<User>> call = pacemakerInterface.getUsers();
@@ -243,6 +250,35 @@ public class PacemakerAPI
     {
       Call<String> call = pacemakerInterface.deleteActivities(id);
       call.execute();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public List<User> listFriends(String id)
+  {
+    List<User> friends = new ArrayList<User>();
+    try
+    {
+      Call<List<User>> call = pacemakerInterface.listFriends(id);
+      Response<List<User>> response = call.execute();
+      friends = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return friends;
+  }
+
+  public void followFriend(String id, String friendId)
+  {
+    try
+    {
+      Call<User> call = pacemakerInterface.followFriend(id, friendId);
+      Response<User> response = call.execute();
     }
     catch (Exception e)
     {

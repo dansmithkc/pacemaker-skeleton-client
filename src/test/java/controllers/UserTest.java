@@ -1,14 +1,17 @@
 package controllers;
 
-import static org.junit.Assert.*;
+import static models.Fixtures.users;
+import static org.junit.Assert.assertEquals;
+
 import java.util.Collection;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import configuration.PacemakerAPIConfiguration;
 import models.User;
-import static models.Fixtures.users;
 
 public class UserTest
 {
@@ -42,5 +45,32 @@ public class UserTest
     users.forEach(user -> pacemaker.createUser(user.firstname, user.lastname, user.email, user.password));
     Collection<User> returnedUsers = pacemaker.getUsers();
     assertEquals(users.size(), returnedUsers.size());
+  }
+
+  @Test
+  public void testFollowFriend()
+  {
+    users.forEach(user -> pacemaker.createUser(user.firstname, user.lastname, user.email, user.password));
+    List<User> returnedUsers = pacemaker.getUsers();
+    pacemaker.followFriend(returnedUsers.get(0).id, returnedUsers.get(1).id);
+  }
+
+  @Test
+  public void testListFriendsNone()
+  {
+    users.forEach(user -> pacemaker.createUser(user.firstname, user.lastname, user.email, user.password));
+    List<User> returnedUsers = pacemaker.getUsers();
+    List<User> friends = pacemaker.listFriends(returnedUsers.get(0).id);
+    assertEquals(0, friends.size());
+  }
+
+  @Test
+  public void testListFriendsOne()
+  {
+    users.forEach(user -> pacemaker.createUser(user.firstname, user.lastname, user.email, user.password));
+    List<User> returnedUsers = pacemaker.getUsers();
+    pacemaker.followFriend(returnedUsers.get(0).id, returnedUsers.get(1).id);
+    List<User> friends = pacemaker.listFriends(returnedUsers.get(0).id);
+    assertEquals(1, friends.size());
   }
 }
