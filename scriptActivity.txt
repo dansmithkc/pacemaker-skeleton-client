@@ -1,8 +1,12 @@
 l dansmithkc@yahoo.com secret
 la
+ar
 aa run fast 2
+ar
 la
 aa run slow 99
 la
+ar
 l
 la
+ar

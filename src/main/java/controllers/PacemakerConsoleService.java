@@ -83,7 +83,7 @@ public class PacemakerConsoleService
     Optional<User> user = Optional.fromNullable(loggedInUser);
     if (user.isPresent())
     {
-      console.renderActivities(paceApi.getActivities(user.get().id));
+      console.renderActivities(paceApi.getActivities(user.get().id, ""));
     }
   }
 
@@ -111,7 +111,7 @@ public class PacemakerConsoleService
     Optional<User> user = Optional.fromNullable(loggedInUser);
     if (user.isPresent())
     {
-      console.renderActivities(paceApi.listActivities(user.get().id, "type"));
+      console.renderActivities(paceApi.getActivities(user.get().id, "type"));
     }
   }
 
@@ -122,7 +122,7 @@ public class PacemakerConsoleService
     if (user.isPresent())
     {
       List<Activity> reportActivities = new ArrayList<>();
-      Collection<Activity> usersActivities = paceApi.getActivities(user.get().id);
+      Collection<Activity> usersActivities = paceApi.getActivities(user.get().id, type);
       usersActivities.forEach(a -> {
         if (a.type.equals(type))
           reportActivities.add(a);

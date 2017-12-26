@@ -18,6 +18,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 interface PacemakerInterface
 {
@@ -28,7 +29,7 @@ interface PacemakerInterface
   Call<User> registerUser(@Body User User);
 
   @GET("/users/{id}/activities")
-  Call<List<Activity>> getActivities(@Path("id") String id);
+  Call<List<Activity>> getActivities(@Path("id") String id, @Query("sortBy") String sortBy);
 
   @POST("/users/{id}/activities")
   Call<Activity> addActivity(@Path("id") String id, @Body Activity activity);
@@ -132,12 +133,12 @@ public class PacemakerAPI
     return activity;
   }
 
-  public Collection<Activity> getActivities(String id)
+  public List<Activity> getActivities(String id, String sortBy)
   {
-    Collection<Activity> activities = null;
+    List<Activity> activities = null;
     try
     {
-      Call<List<Activity>> call = pacemakerInterface.getActivities(id);
+      Call<List<Activity>> call = pacemakerInterface.getActivities(id, sortBy);
       Response<List<Activity>> response = call.execute();
       activities = response.body();
     }
@@ -146,11 +147,6 @@ public class PacemakerAPI
       System.out.println(e.getMessage());
     }
     return activities;
-  }
-
-  public List<Activity> listActivities(String userId, String sortBy)
-  {
-    return null;
   }
 
   public void addLocation(String id, String activityId, double latitude, double longitude)

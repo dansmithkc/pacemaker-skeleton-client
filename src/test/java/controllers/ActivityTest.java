@@ -1,9 +1,11 @@
 package controllers;
 
+import static models.Fixtures.locations;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.After;
@@ -14,7 +16,6 @@ import configuration.PacemakerAPIConfiguration;
 import models.Activity;
 import models.Location;
 import models.User;
-import static models.Fixtures.locations;
 
 public class ActivityTest
 {
@@ -95,4 +96,21 @@ public class ActivityTest
     assertEquals(locations.size(), returnedLocations.size());
     assertEquals(locations, returnedLocations);
   }
+
+  @Test
+  public void testListAllActivitiesByTypeOneActivity()
+  {
+    // Setup
+    pacemaker.deleteActivities(homer.id);
+    Activity activity = new Activity("walk", "shop", 2.5);
+    Activity returnedActivity = pacemaker.createActivity(homer.id, activity.type, activity.location, activity.distance);
+
+    // Exercise
+    List<Activity> activities = pacemaker.getActivities(homer.id, "type");
+
+    // Verify
+    assertEquals(1, activities.size());
+    assertEquals("walk", activities.get(0).getType());
+  }
+
 }
