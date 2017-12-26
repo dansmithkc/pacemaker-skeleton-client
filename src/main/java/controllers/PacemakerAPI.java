@@ -42,7 +42,7 @@ interface PacemakerInterface
   Call<Location> addLocation(@Path("id") String id, @Path("activityId") String activityId, @Body Location location);
 
   @DELETE("/users")
-  Call<User> deleteUsers();
+  Call<String> deleteUsers();
 
   @DELETE("/users/{id}")
   Call<User> deleteUser(@Path("id") String id);
@@ -60,7 +60,7 @@ interface PacemakerInterface
   Call<List<User>> listFriends(@Path("id") String id);
 
   @POST("/users/{id}/friends/{friendId}")
-  Call<User> followFriend(@Path("id") String id, @Path("friendId") String friendId);
+  Call<String> followFriend(@Path("id") String id, @Path("friendId") String friendId);
 }
 
 public class PacemakerAPI
@@ -203,8 +203,9 @@ public class PacemakerAPI
   {
     try
     {
-      Call<User> call = pacemakerInterface.deleteUsers();
-      call.execute();
+      Call<String> call = pacemakerInterface.deleteUsers();
+      Response<String> response = call.execute();
+      String ignored = response.body();
     }
     catch (Exception e)
     {
@@ -277,8 +278,9 @@ public class PacemakerAPI
   {
     try
     {
-      Call<User> call = pacemakerInterface.followFriend(id, friendId);
-      Response<User> response = call.execute();
+      Call<String> call = pacemakerInterface.followFriend(id, friendId);
+      Response<String> response = call.execute();
+      String ignored = response.body();
     }
     catch (Exception e)
     {

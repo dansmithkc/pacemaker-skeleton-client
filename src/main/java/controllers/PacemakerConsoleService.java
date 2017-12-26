@@ -141,11 +141,32 @@ public class PacemakerConsoleService
   @Command(description = "Follow Friend: Follow a specific friend")
   public void follow(@Param(name = "email") String email)
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    Optional<User> friend = Optional.fromNullable(paceApi.getUserByEmail(email));
+    if (!friend.isPresent())
+    {
+      console.println("friend not found");
+      return;
+    }
+    paceApi.followFriend(loggedInUser.getId(), friend.get().getId());
+    console.println("ok");
   }
 
   @Command(description = "List Friends: List all of the friends of the logged in user")
   public void listFriends()
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    console.renderUsers(paceApi.listFriends(loggedInUser.getId()));
   }
 
   @Command(description = "Friend Activity Report: List all activities of specific friend, sorted alphabetically by type)")
