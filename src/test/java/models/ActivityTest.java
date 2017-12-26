@@ -38,7 +38,7 @@ public class ActivityTest
   @Test
   public void testToString()
   {
-    assertEquals("Activity{" + test.id + ", walk, fridge, 0.001}", test.toString());
+    assertEquals("Activity{" + test.id + ", walk, fridge, 0.001, []}", test.toString());
   }
 
   @Test
