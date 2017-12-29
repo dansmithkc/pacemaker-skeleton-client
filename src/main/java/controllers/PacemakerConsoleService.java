@@ -62,9 +62,13 @@ public class PacemakerConsoleService
   @Command(description = "Logout: Logout current user")
   public void logout()
   {
-    console.println("Logging out " + loggedInUser.email);
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
+    {
+      console.println("Logging out " + loggedInUser.email);
+      loggedInUser = null;
+    }
     console.println("ok");
-    loggedInUser = null;
   }
 
   @Command(description = "Add activity: create and add an activity for the logged in user")
@@ -94,15 +98,23 @@ public class PacemakerConsoleService
   public void addLocation(@Param(name = "activity-id") String id, @Param(name = "longitude") double longitude,
       @Param(name = "latitude") double latitude)
   {
-    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
-    if (activity.isPresent())
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
     {
-      paceApi.addLocation(loggedInUser.getId(), activity.get().id, latitude, longitude);
-      console.println("ok");
+      Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
+      if (activity.isPresent())
+      {
+        paceApi.addLocation(loggedInUser.getId(), activity.get().id, latitude, longitude);
+        console.println("ok");
+      }
+      else
+      {
+        console.println("not found");
+      }
     }
     else
     {
-      console.println("not found");
+      console.println("logged in user not found");
     }
   }
 
@@ -132,10 +144,14 @@ public class PacemakerConsoleService
   @Command(description = "List all locations for a specific activity")
   public void listActivityLocations(@Param(name = "activity-id") String id)
   {
-    Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
-    if (activity.isPresent())
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (user.isPresent())
     {
-      console.renderLocations(activity.get().route);
+      Optional<Activity> activity = Optional.fromNullable(paceApi.getActivity(loggedInUser.getId(), id));
+      if (activity.isPresent())
+      {
+        console.renderLocations(activity.get().route);
+      }
     }
   }
 
@@ -154,7 +170,7 @@ public class PacemakerConsoleService
       console.println("friend not found");
       return;
     }
-    paceApi.followFriend(loggedInUser.getId(), friend.get().getId());
+    paceApi.followFriend(user.get().getId(), friend.get().getId());
     console.println("ok");
   }
 
@@ -167,13 +183,19 @@ public class PacemakerConsoleService
       console.println("logged in user not found");
       return;
     }
-    console.renderUsers(paceApi.listFriends(loggedInUser.getId()));
+    console.renderUsers(paceApi.listFriends(user.get().getId()));
   }
 
   @Command(description = "Friend Activity Report: List all activities of specific friend, sorted alphabetically by type)")
   public void friendActivityReport(@Param(name = "email") String email)
   {
-    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(loggedInUser.getId()));
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(user.get().getId()));
     if (!friends.isPresent())
     {
       console.println("friends not found");
@@ -208,7 +230,13 @@ public class PacemakerConsoleService
   @Command(description = "Message Friend: send a message to a friend")
   public void messageFriend(@Param(name = "email") String email, @Param(name = "message") String message)
   {
-    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(loggedInUser.getId()));
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(user.get().getId()));
     if (!friends.isPresent())
     {
       console.println("friends not found");
@@ -220,7 +248,7 @@ public class PacemakerConsoleService
       console.println("friend not found");
       return;
     }
-    paceApi.messageFriend(loggedInUser.getId(), friend.get(0).getId(), new Message(message));
+    paceApi.messageFriend(user.get().getId(), friend.get(0).getId(), new Message(message));
     console.println("ok");
   }
 
@@ -239,6 +267,14 @@ public class PacemakerConsoleService
   @Command(description = "Distance Leader Board: list summary distances of all friends, sorted longest to shortest")
   public void distanceLeaderBoard()
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    paceApi.listFriends(user.get().getId());
+
   }
 
   // Excellent Commands
