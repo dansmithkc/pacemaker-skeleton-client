@@ -10,6 +10,7 @@ import asg.cliche.Command;
 import asg.cliche.Param;
 import configuration.PacemakerAPIConfiguration;
 import models.Activity;
+import models.Message;
 import models.User;
 import parsers.AsciiTableParser;
 import parsers.Parser;
@@ -207,11 +208,32 @@ public class PacemakerConsoleService
   @Command(description = "Message Friend: send a message to a friend")
   public void messageFriend(@Param(name = "email") String email, @Param(name = "message") String message)
   {
+    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(loggedInUser.getId()));
+    if (!friends.isPresent())
+    {
+      console.println("friends not found");
+      return;
+    }
+    List<User> friend = friends.get().stream().filter(f -> f.email.equals(email)).collect(Collectors.toList());
+    if (friend.size() == 0)
+    {
+      console.println("friend not found");
+      return;
+    }
+    paceApi.messageFriend(loggedInUser.getId(), friend.get(0).getId(), new Message(message));
+    console.println("ok");
   }
 
   @Command(description = "List Messages: List all messages for the logged in user")
   public void listMessages()
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    console.renderMessages(paceApi.listMessages(user.get().id));
   }
 
   @Command(description = "Distance Leader Board: list summary distances of all friends, sorted longest to shortest")

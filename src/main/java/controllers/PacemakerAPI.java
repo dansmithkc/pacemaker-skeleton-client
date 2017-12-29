@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 
 import models.Activity;
 import models.Location;
+import models.Message;
 import models.User;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -64,6 +65,12 @@ interface PacemakerInterface
 
   @DELETE("/users/{id}/friends")
   Call<String> unfollowFriends(@Path("id") String id);
+
+  @POST("/users/{id}/friends/{friendId}/message")
+  Call<String> messageFriend(@Path("id") String id, @Path("friendId") String friendId, @Body Message message);
+
+  @GET("/users/{id}/messages")
+  Call<List<Message>> listMessages(@Path("id") String id);
 }
 
 public class PacemakerAPI
@@ -303,6 +310,36 @@ public class PacemakerAPI
     {
       System.out.println(e.getMessage());
     }
+  }
+
+  public void messageFriend(String id, String friendId, Message message)
+  {
+    try
+    {
+      Call<String> call = pacemakerInterface.messageFriend(id, friendId, message);
+      Response<String> response = call.execute();
+      String ignored = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public List<Message> listMessages(String id)
+  {
+    List<Message> messages = new ArrayList<> ();
+    try
+    {
+      Call<List<Message>> call = pacemakerInterface.listMessages(id);
+      Response<List<Message>> response = call.execute();
+     messages = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+    return messages;
   }
 
 }

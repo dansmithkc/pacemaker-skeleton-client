@@ -5,6 +5,7 @@ import java.util.List;
 
 import models.Activity;
 import models.Location;
+import models.Message;
 import models.User;
 
 public class Parser
@@ -58,5 +59,14 @@ public class Parser
       return;
     }
     System.out.println(locations.toString());
+  }
+
+  public void renderMessages(List<Message> messages)
+  {
+    if (messages == null)
+    {
+      return;
+    }
+    System.out.println(messages.toString());
   }
 }

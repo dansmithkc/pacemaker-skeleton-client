@@ -1,14 +1,17 @@
 package parsers;
 
-import com.bethecoder.ascii_table.ASCIITable;
-import com.bethecoder.ascii_table.impl.CollectionASCIITableAware;
-import com.bethecoder.ascii_table.spec.IASCIITableAware;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import com.bethecoder.ascii_table.ASCIITable;
+import com.bethecoder.ascii_table.impl.CollectionASCIITableAware;
+import com.bethecoder.ascii_table.spec.IASCIITableAware;
+
 import models.Activity;
 import models.Location;
+import models.Message;
 import models.User;
 
 public class AsciiTableParser extends Parser
@@ -95,4 +98,22 @@ public class AsciiTableParser extends Parser
       System.out.println("not found");
     }
   }
+
+  public void renderMessages(List<Message> messages)
+  {
+    if (messages != null)
+    {
+      if (!messages.isEmpty())
+      {
+        IASCIITableAware asciiTableAware = new CollectionASCIITableAware<Message>(messages, "text");
+        System.out.println(ASCIITable.getInstance().getTable(asciiTableAware));
+      }
+      System.out.println("ok");
+    }
+    else
+    {
+      System.out.println("not found");
+    }
+  }
+
 }
