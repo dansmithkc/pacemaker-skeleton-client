@@ -172,6 +172,21 @@ public class PacemakerConsoleService
   @Command(description = "Friend Activity Report: List all activities of specific friend, sorted alphabetically by type)")
   public void friendActivityReport(@Param(name = "email") String email)
   {
+    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(loggedInUser.getId()));
+    if (!friends.isPresent())
+    {
+      console.println("friends not found");
+      return;
+    }
+    List<User> friend = friends.get().stream().filter(f -> f.email.equals(email)).collect(Collectors.toList());
+    if (friend.size() == 0)
+    {
+      console.println("friend not found");
+      return;
+    }
+    String id = friend.get(0).id;
+    Collection<Activity> usersActivities = paceApi.getActivities(id, "type");
+    console.renderActivities(usersActivities);
   }
 
   // Good Commands

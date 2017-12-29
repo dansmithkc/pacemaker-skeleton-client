@@ -1,0 +1,22 @@
+r Dan Smith dansmithkc@yahoo.com secret
+r Harry Helper helper@gmail.com anothersecret
+r Ignore Me ignoreme@gmail.com s
+l dansmithkc@yahoo.com secret
+far helper@gmail.com
+far nobody
+f helper@gmail.com
+far helper@gmail.com
+l
+far helper@gmail.com
+l helper@gmail.com anothersecret
+aa run fast 2
+aa run slow 99
+aa run slow 999
+aa run slow 9
+aa talk slow 99
+aa play slow 999
+aa experiment slow 9
+aa run slow 99
+l dansmithkc@yahoo.com secret
+far helper@gmail.com
+far ignoreme@gmail.com
