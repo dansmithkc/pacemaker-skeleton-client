@@ -194,6 +194,14 @@ public class PacemakerConsoleService
   @Command(description = "Unfollow Friends: Stop following a friend")
   public void unfollowFriend()
   {
+    Optional<User> user = Optional.fromNullable(loggedInUser);
+    if (!user.isPresent())
+    {
+      console.println("logged in user not found");
+      return;
+    }
+    paceApi.unfollowFriends(user.get().id);
+    console.println("ok");
   }
 
   @Command(description = "Message Friend: send a message to a friend")

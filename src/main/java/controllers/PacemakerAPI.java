@@ -61,6 +61,9 @@ interface PacemakerInterface
 
   @POST("/users/{id}/friends/{friendId}")
   Call<String> followFriend(@Path("id") String id, @Path("friendId") String friendId);
+
+  @DELETE("/users/{id}/friends")
+  Call<String> unfollowFriends(@Path("id") String id);
 }
 
 public class PacemakerAPI
@@ -287,4 +290,19 @@ public class PacemakerAPI
       System.out.println(e.getMessage());
     }
   }
+
+  public void unfollowFriends(String id)
+  {
+    try
+    {
+      Call<String> call = pacemakerInterface.unfollowFriends(id);
+      Response<String> response = call.execute();
+      String ignored = response.body();
+    }
+    catch (Exception e)
+    {
+      System.out.println(e.getMessage());
+    }
+  }
+
 }
