@@ -1,10 +1,12 @@
 package models;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
+
 import java.io.Serializable;
+
 import com.google.common.base.Objects;
 
-public class User implements Serializable
+public class User implements Serializable, IUserName
 {
 
   public String id;
@@ -35,6 +37,11 @@ public class User implements Serializable
   public String getEmail()
   {
     return email;
+  }
+
+  public String getName()
+  {
+    return firstname + " " + lastname + " - " + id;
   }
 
   public User(String firstName, String lastName, String email, String password)

@@ -2,6 +2,7 @@ package parsers;
 
 import static models.Fixtures.activities;
 import static models.Fixtures.locations;
+import static models.Fixtures.userDistances;
 import static models.Fixtures.users;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import models.Activity;
 import models.Location;
 import models.User;
+import models.UserDistance;
 
 public abstract class AbstractParserTest
 {
@@ -64,4 +66,11 @@ public abstract class AbstractParserTest
     parser.renderLocations(null);
   }
 
+  @Test
+  public void testRenderUserDistance()
+  {
+    parser.renderUserDistance(userDistances);
+    parser.renderUserDistance(new ArrayList<UserDistance>());
+    parser.renderUserDistance(null);
+  }
 }

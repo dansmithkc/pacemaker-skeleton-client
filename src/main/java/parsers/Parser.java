@@ -7,6 +7,7 @@ import models.Activity;
 import models.Location;
 import models.Message;
 import models.User;
+import models.UserDistance;
 
 public class Parser
 {
@@ -68,5 +69,14 @@ public class Parser
       return;
     }
     System.out.println(messages.toString());
+  }
+
+  public void renderUserDistance(List<UserDistance> userDistances)
+  {
+    if (userDistances == null)
+    {
+      return;
+    }
+    System.out.println(userDistances.toString());
   }
 }

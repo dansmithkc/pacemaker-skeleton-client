@@ -30,4 +30,7 @@ public class Fixtures
 
   public static List<Activity> activitiesSortedByType = new ArrayList<>(
       Arrays.asList(activities.get(4), activities.get(2), activities.get(1), activities.get(0), activities.get(3)));
+
+  public static List<UserDistance> userDistances = new ArrayList<>(
+      Arrays.asList(new UserDistance("Mary", 10), new UserDistance("Frank", 6), new UserDistance("Bob", 11)));
 }

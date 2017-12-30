@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,8 +11,10 @@ import asg.cliche.Command;
 import asg.cliche.Param;
 import configuration.PacemakerAPIConfiguration;
 import models.Activity;
+import models.IUserName;
 import models.Message;
 import models.User;
+import models.UserDistance;
 import parsers.AsciiTableParser;
 import parsers.Parser;
 
@@ -273,8 +276,23 @@ public class PacemakerConsoleService
       console.println("logged in user not found");
       return;
     }
-    paceApi.listFriends(user.get().getId());
-
+    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(user.get().getId()));
+    if (!friends.isPresent())
+    {
+      console.println("friends not found");
+      return;
+    }
+    List<UserDistance> userDistances = new ArrayList<>();
+    for (User friend : friends.get())
+    {
+      List<Activity> activities = paceApi.getActivities(friend.id, "");
+      double distance = activities.stream().mapToDouble(i -> i.distance).sum();
+      UserDistance userDistance = new UserDistance(friend, distance);
+      userDistances.add(userDistance);
+    }
+    // Reverse Sort -s compare backwards
+    userDistances.sort((a1, a2) -> new Double(a2.distance).compareTo(a1.distance));
+    console.renderUserDistance(userDistances);
   }
 
   // Excellent Commands

@@ -13,6 +13,7 @@ import models.Activity;
 import models.Location;
 import models.Message;
 import models.User;
+import models.UserDistance;
 
 public class AsciiTableParser extends Parser
 {
@@ -106,6 +107,24 @@ public class AsciiTableParser extends Parser
       if (!messages.isEmpty())
       {
         IASCIITableAware asciiTableAware = new CollectionASCIITableAware<Message>(messages, "text");
+        System.out.println(ASCIITable.getInstance().getTable(asciiTableAware));
+      }
+      System.out.println("ok");
+    }
+    else
+    {
+      System.out.println("not found");
+    }
+  }
+
+  public void renderUserDistance(List<UserDistance> userDistances)
+  {
+    if (userDistances != null)
+    {
+      if (!userDistances.isEmpty())
+      {
+        IASCIITableAware asciiTableAware = new CollectionASCIITableAware<UserDistance>(userDistances, "name",
+            "distance");
         System.out.println(ASCIITable.getInstance().getTable(asciiTableAware));
       }
       System.out.println("ok");
