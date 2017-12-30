@@ -274,13 +274,30 @@ public class PacemakerConsoleService
   @Command(description = "Distance Leader Board: list summary distances of all friends, sorted longest to shortest")
   public void distanceLeaderBoard()
   {
-    distanceLeaderBoardByType("");
+    distanceLeaderBoard("", "");
   }
 
   // Excellent Commands
 
   @Command(description = "Distance Leader Board: distance leader board refined by type")
   public void distanceLeaderBoardByType(@Param(name = "byType: type") String type)
+  {
+    distanceLeaderBoard(type, "");
+  }
+
+  @Command(description = "Message All Friends: send a message to all friends")
+  public void messageAllFriends(@Param(name = "message") String message)
+  {
+    messageFriend("", message);
+  }
+
+  @Command(description = "Location Leader Board: list sorted summary distances of all friends in named location")
+  public void locationLeaderBoard(@Param(name = "location") String location)
+  {
+    distanceLeaderBoard("", location);
+  }
+
+  public void distanceLeaderBoard(String type, String location)
   {
     Optional<User> user = Optional.fromNullable(loggedInUser);
     if (!user.isPresent())
@@ -302,6 +319,10 @@ public class PacemakerConsoleService
       {
         activities = activities.stream().filter(a -> a.type.equals(type)).collect(Collectors.toList());
       }
+      if (!location.equals(""))
+      {
+        activities = activities.stream().filter(a -> a.location.equals(location)).collect(Collectors.toList());
+      }
       double distance = activities.stream().mapToDouble(i -> i.distance).sum();
       UserDistance userDistance = new UserDistance(friend, distance);
       userDistances.add(userDistance);
@@ -311,18 +332,6 @@ public class PacemakerConsoleService
     console.renderUserDistance(userDistances);
   }
 
-  @Command(description = "Message All Friends: send a message to all friends")
-  public void messageAllFriends(@Param(name = "message") String message)
-  {
-    messageFriend("", message);
-  }
-
-  @Command(description = "Location Leader Board: list sorted summary distances of all friends in named location")
-  public void locationLeaderBoard(@Param(name = "location") String message)
-  {
-  }
-
   // Outstanding Commands
 
-  // Todo
 }
