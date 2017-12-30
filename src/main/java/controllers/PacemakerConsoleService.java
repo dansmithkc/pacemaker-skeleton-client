@@ -11,7 +11,6 @@ import asg.cliche.Command;
 import asg.cliche.Param;
 import configuration.PacemakerAPIConfiguration;
 import models.Activity;
-import models.IUserName;
 import models.Message;
 import models.User;
 import models.UserDistance;
@@ -270,6 +269,14 @@ public class PacemakerConsoleService
   @Command(description = "Distance Leader Board: list summary distances of all friends, sorted longest to shortest")
   public void distanceLeaderBoard()
   {
+    distanceLeaderBoardByType("");
+  }
+
+  // Excellent Commands
+
+  @Command(description = "Distance Leader Board: distance leader board refined by type")
+  public void distanceLeaderBoardByType(@Param(name = "byType: type") String type)
+  {
     Optional<User> user = Optional.fromNullable(loggedInUser);
     if (!user.isPresent())
     {
@@ -286,6 +293,10 @@ public class PacemakerConsoleService
     for (User friend : friends.get())
     {
       List<Activity> activities = paceApi.getActivities(friend.id, "");
+      if (!type.equals(""))
+      {
+        activities = activities.stream().filter(a -> a.type.equals(type)).collect(Collectors.toList());
+      }
       double distance = activities.stream().mapToDouble(i -> i.distance).sum();
       UserDistance userDistance = new UserDistance(friend, distance);
       userDistances.add(userDistance);
@@ -293,13 +304,6 @@ public class PacemakerConsoleService
     // Reverse Sort -s compare backwards
     userDistances.sort((a1, a2) -> new Double(a2.distance).compareTo(a1.distance));
     console.renderUserDistance(userDistances);
-  }
-
-  // Excellent Commands
-
-  @Command(description = "Distance Leader Board: distance leader board refined by type")
-  public void distanceLeaderBoardByType(@Param(name = "byType: type") String type)
-  {
   }
 
   @Command(description = "Message All Friends: send a message to all friends")

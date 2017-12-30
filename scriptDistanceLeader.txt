@@ -9,19 +9,27 @@ dlb
 f ignoreme@gmail.com
 dlb
 aa run fast 2
-aa run slow 9
+aa walk slow 9
 aa run slow 9
 dlb
 l helper@gmail.com anothersecret
 aa run fast 2
-aa run slow 99
+aa walk slow 99
 aa run slow 999
+aa fly slow 999
+aa fly slow 999
 dlb
 l dansmithkc@yahoo.com secret
 dlb
 l ignoreme@gmail.com s
 aa run fast 24.3
-aa run slow 99
+aa walk slow 99
 aa run slow 999
+aa swim slow 999
 l dansmithkc@yahoo.com secret
 dlb
+dlbbt run
+dlbbt walk
+dlbbt fly
+dlbbt swim
+dlbbt nothing
