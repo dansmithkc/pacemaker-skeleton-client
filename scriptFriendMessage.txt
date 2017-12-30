@@ -1,12 +1,7 @@
-r Dan Smith dansmithkc@yahoo.com secret
-r Harry Helper helper@gmail.com anothersecret
-r Ignore Me ignoreme@gmail.com s
 l
 lm
 l dansmithkc@yahoo.com secret
 lm
-f helper@gmail.com
-f ignoreme@gmail.com
 mf helper@gmail.com "Good Buddy"
 l helper@gmail.com anothersecret
 lm

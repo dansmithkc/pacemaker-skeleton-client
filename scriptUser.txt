@@ -2,6 +2,7 @@ lu
 r Dan Smith dansmithkc@yahoo.com secret
 lu
 r Harry Helper helper@gmail.com anothersecret
+r Ignore Me ignoreme@gmail.com s
 lu
 l dansmithkc@yahoo.com secret
 l helper@gmail.com anothersecret
@@ -18,8 +19,12 @@ f invalidEmail
 f helper@gmail.com
 lf
 f helper@gmail.com
+f ignoreme@gmail.com
 lf
 uf
 lf
 l
 uf
+l dansmithkc@yahoo.com secret
+f helper@gmail.com
+f ignoreme@gmail.com
