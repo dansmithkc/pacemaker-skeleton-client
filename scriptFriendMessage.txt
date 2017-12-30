@@ -6,6 +6,7 @@ lm
 l dansmithkc@yahoo.com secret
 lm
 f helper@gmail.com
+f ignoreme@gmail.com
 mf helper@gmail.com "Good Buddy"
 l helper@gmail.com anothersecret
 lm
@@ -13,5 +14,10 @@ l dansmithkc@yahoo.com secret
 mf helper@gmail.com Another
 mf helper@gmail.com Another2
 mf helper@gmail.com Another
+mf ignoreme@gmail.com Another
+mf ignoreme@gmail.com "I am not ignored"
+maf "Calling everyone"
 l helper@gmail.com anothersecret
+lm
+l ignoreme@gmail.com s
 lm

@@ -238,19 +238,24 @@ public class PacemakerConsoleService
       console.println("logged in user not found");
       return;
     }
-    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(user.get().getId()));
+    String userId = user.get().getId();
+    Optional<List<User>> friends = Optional.fromNullable(paceApi.listFriends(userId));
     if (!friends.isPresent())
     {
       console.println("friends not found");
       return;
     }
-    List<User> friend = friends.get().stream().filter(f -> f.email.equals(email)).collect(Collectors.toList());
-    if (friend.size() == 0)
+    List<User> friendsToMessage = friends.get();
+    if (!email.equals(""))
+    {
+      friendsToMessage = friendsToMessage.stream().filter(f -> f.email.equals(email)).collect(Collectors.toList());
+    }
+    if (friendsToMessage.size() == 0)
     {
       console.println("friend not found");
       return;
     }
-    paceApi.messageFriend(user.get().getId(), friend.get(0).getId(), new Message(message));
+    friendsToMessage.forEach(friend -> paceApi.messageFriend(userId, friend.getId(), new Message(message)));
     console.println("ok");
   }
 
@@ -309,6 +314,7 @@ public class PacemakerConsoleService
   @Command(description = "Message All Friends: send a message to all friends")
   public void messageAllFriends(@Param(name = "message") String message)
   {
+    messageFriend("", message);
   }
 
   @Command(description = "Location Leader Board: list sorted summary distances of all friends in named location")
